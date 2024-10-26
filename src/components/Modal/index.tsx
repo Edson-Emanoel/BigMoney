@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import './style.css'
 import axios from 'axios';
+import { useNumberFormat } from '@react-input/number-format';
 
 interface IModal{
     isOpen: boolean;
@@ -15,18 +16,44 @@ export default function Modal( { isOpen, setOpen, title }: IModal ){
     const [date, setDate] = useState("");
     const [status, setStatus] = useState("Entrada");
 
+    const inputRef = useNumberFormat({
+        locales: 'pt',
+        format:"currency",
+        currency:"BRL",
+        maximumFractionDigits: 2,
+    });
+
     const validar = (e: FormEvent) => {
         e.preventDefault();
 
-        axios.post("http://localhost:3000/transactions", {
-            title: titleValue,
-            value: price,
-            category: category,
-            status: status,
-            data: date
-        })
+        if(!titleValue){
+            alert("Preecha o campo do título");
+        } else if (!price) {
+            alert("Preecha o campo do preço");
+        } else if (!date) {
+            alert("Preecha o campo de data");
+        } else if (!category) {
+            alert("Preecha o campo da categoria");
+        } else if (!status) {
+            alert("Preecha o campo de status")
+        } else {
+            axios.post("http://localhost:3000/transactions", {
+                title: titleValue,
+                value: price,
+                category: category,
+                status: status,
+                data: date
+            })
+    
+            alert("Cadastro foi feito com Sucesso!")
 
-        alert("Cadastro foi feito com Sucesso!")
+            setTitleValue("")
+            setPrice("")
+            setDate("")
+            setCategory("")
+            setStatus("")
+        }
+
     }
 
     if(isOpen){
@@ -39,23 +66,23 @@ export default function Modal( { isOpen, setOpen, title }: IModal ){
                 </header>
                 <main>
                     <form className='form-modal'>
-                        <input type="text" value={titleValue}  onChange={(e) => setTitleValue(e.target.value)} placeholder="Descricao " id="titlericao" />
-                        <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Preco " id="preco" />
+                        <input type="text" value={titleValue}  onChange={(e) => setTitleValue(e.target.value)} placeholder="Descricao " id="title" />
+                        <input ref={inputRef} type="text" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Preço" id="preco" />
                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Data" id="preco" />
-                        <select id="categoria" value={category} onChange={(e) => setCategory(e.target.value)}>
+                        <select id="categoria" value={status} onChange={(e) => setStatus(e.target.value)}>
                             <option value="">Selecione uma Categoria</option>
-                            <option value="Aluguel">Aluguel</option>
-                            <option value="Comida">Comida</option>
-                            <option value="Compras">Compras</option>
+                            <option value="Pago">Pago</option>
+                            <option value="Á vencer">Á vencer</option>
+                            <option value="Comida">Vencido(a)</option>
                         </select>
 
                         <div className="btn-group">
-                            <button type='button' id="Entrada" value="Entrada" onClick={(e) => setStatus(e.target.value)}>
+                            <button type='button' id="entrada" value="Entrada" onClick={(e) => setCategory(e.target.value)}>
                                 <i className="fa-regular fa-circle-up"></i>
                                 Entrada
                             </button>
 
-                            <button type='button' id="Saida" value="Saída" onClick={(e) => setStatus(e.target.value)}>
+                            <button type='button' id="saida" value="Saída" onClick={(e) => setCategory(e.target.value)}>
                                 <i className="fa-regular fa-circle-down"></i>
                                 Saída
                             </button>
