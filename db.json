@@ -1,0 +1,28 @@
+{
+  "transactions": [
+    {
+      "id": "1",
+      "title": "Desenvolvimento de site",
+      "value": "1.200,00",
+      "category": "Recebimento",
+      "status": "Entrada",
+      "data": "26-10-2024"
+    },
+    {
+      "id": "5316",
+      "title": "TESTE",
+      "value": "123",
+      "category": "Aluguel",
+      "status": "Entrada",
+      "data": "2020-10-23"
+    },
+    {
+      "id": "af02",
+      "title": "TESTE",
+      "value": "12313",
+      "category": "Comida",
+      "status": "entrada",
+      "data": "1322-03-12"
+    }
+  ]
+}
